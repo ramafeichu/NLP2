@@ -1,0 +1,12 @@
+{
+  "dependencies": [
+    "groq",
+    "pinecone-client",
+    "sentence-transformers",
+    "langchain-text-splitters"
+  ],
+  "graphs": {
+    "rag": "./pearson_graph.py:app"
+  },
+  "env": "./.env"
+}
