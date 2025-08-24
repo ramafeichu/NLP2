@@ -1,27 +1,38 @@
 import os
 from typing import List
-from langchain.vectorstores import Pinecone
-from langchain.embeddings import HuggingFaceEmbeddings
-import pinecone
+from sentence_transformers import SentenceTransformer
+from pinecone import Pinecone
 
-# Mapa target → índice
-INDEX_MAP = {
-    "ana": "ana-index",
-    "juan": "juan-index"
-}
+embedding_model_name = os.getenv("EMBEDDING_MODEL", "paraphrase-multilingual-MiniLM-L12-v2")
+embedding_model = SentenceTransformer(embedding_model_name)
 
-# Setup embeddings (usando modelo del .env)
-embedding_model_name = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
-embeddings = HuggingFaceEmbeddings(model_name=embedding_model_name)
+pinecone_api_key = os.getenv("PINECONE_API_KEY")
+index_name = os.getenv("INDEX_NAME", "cv-index")
+pinecone_env = os.getenv("PINECONE_ENVIRONMENT")
 
-# Inicializar Pinecone
-pinecone.init(api_key=os.getenv("PINECONE_API_KEY"), environment=os.getenv("PINECONE_REGION"))
+pc = Pinecone(api_key=pinecone_api_key)
+index = pc.Index(index_name)
+
 
 def retrieve_context(target: str, query: str, k: int = 3) -> List[str]:
-    index_name = INDEX_MAP.get(target)
-    if not index_name:
+    if not target:
         return []
 
-    vectorstore = Pinecone.from_existing_index(index_name, embeddings)
-    results = vectorstore.similarity_search(query, k=k)
-    return [doc.page_content for doc in results]
+    print(f"Buscando en índice '{index_name}', namespace: '{target}', query: '{query}'")
+
+    # Generar embedding del query
+    vector = embedding_model.encode(query).astype("float32").tolist()
+
+    # Realizar consulta en Pinecone
+    res = index.query(
+        vector=vector,
+        top_k=k,
+        include_metadata=True,
+        namespace=target,
+    )
+
+    matches = res.get("matches", [])
+    print(f"Resultados obtenidos: {len(matches)}")
+
+    # Devolver texto de metadata si está presente
+    return [match["metadata"].get("text", "") for match in matches]

@@ -1,7 +1,7 @@
 {
   "dependencies": [
     "groq",
-    "pinecone-client",
+    "pinecone",
     "sentence-transformers",
     "langchain-text-splitters"
   ],
