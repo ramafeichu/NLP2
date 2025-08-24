@@ -8,7 +8,7 @@ Este repositorio contiene los entregables correspondientes a los trabajos práct
 
 Se implementó una versión simplificada de un modelo generativo tipo GPT, con las siguientes características:
 
-➡ Ver más en [`TP1/readme.md`](TP1/readme.md)
+[`TP1/readme.md`](TP1/readme.md)
 
 ---
 
@@ -16,7 +16,7 @@ Se implementó una versión simplificada de un modelo generativo tipo GPT, con l
 
 Se desarrolló un sistema de generación de texto (chatbot) utilizando la técnica de **Retrieval-Augmented Generation (RAG)**, que permite recuperar información del CV de una persona y generar respuestas sobre ese contexto.
 
-➡ Ver más en [`TP2/readme.md`](TP2/readme.md)
+[`TP2/readme.md`](TP2/readme.md)
 
 ---
 
@@ -24,4 +24,4 @@ Se desarrolló un sistema de generación de texto (chatbot) utilizando la técni
 
 Se creó un sistema de agentes capaz de elegir qué persona debe responder en función de la consulta del usuario.
 
-➡ Ver más en [`TP3/readme.md`](TP3/readme.md)
+[`TP3/readme.md`](TP3/readme.md)
